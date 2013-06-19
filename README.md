@@ -8,7 +8,7 @@ It is also useful when you have some 3rd party JQuery table search plugin attach
 
 thanks to http://www.kunalbabre.com/projects/table2CSV.php
 
-see also https://github.com/ZachWick/TableCSVExport for another fork.
+see also https://github.com/ZachWick/TableCSVExport for another fork that already implemented some new features (emptyValue, showHiddenRows, rowFilter)
 
 Option 1
 =========
