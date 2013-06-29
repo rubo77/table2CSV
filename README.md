@@ -1,6 +1,12 @@
 table2CSV
 =========
 
+This is a duplicate of another fork:
+https://github.com/ZachWick/TableCSVExport 
+that already implemented some more new features (emptyValue, showHiddenRows, rowFilter)
+
+so just for completion, here the original manual:
+
 A small JQuery utility which allows you to export any HTML table as CSV file
 
 It's very handy tool to use specially during development of reporting projects. 
@@ -8,11 +14,6 @@ It is also useful when you have some 3rd party JQuery table search plugin attach
 
 thanks to http://www.kunalbabre.com/projects/table2CSV.php
 
-This is a duplicate of another fork:
-https://github.com/ZachWick/TableCSVExport 
-that already implemented some new features (emptyValue, showHiddenRows, rowFilter)
-
-so just for completion, here the original manual:
 
 Option 1
 =========
