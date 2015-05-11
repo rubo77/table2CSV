@@ -2,6 +2,7 @@ jQuery.fn.table2CSV = function(options) {
     var options = jQuery.extend({
         separator: ',',
         header: [],
+        headerSelector: 'th',
         delivery: 'popup' // popup, value
     },
     options);
@@ -19,7 +20,7 @@ jQuery.fn.table2CSV = function(options) {
             tmpRow[tmpRow.length] = formatData(options.header[i]);
         }
     } else {
-        $(el).filter(':visible').find('th').each(function() {
+        $(el).filter(':visible').find(options.headerSelector).each(function() {
             if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
         });
     }
