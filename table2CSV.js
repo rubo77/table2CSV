@@ -60,7 +60,7 @@ jQuery.fn.table2CSV = function(options) {
         var regexp = new RegExp(/\<[^\<]+\>/g);
         var output = output.replace(regexp, "");
         if (output == "") return '';
-        return '"' + output + '"';
+        return '"' + output.trim() + '"';
     }
     function popup(data) {
         var generator = window.open('', 'csv', 'height=400,width=600');
