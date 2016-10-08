@@ -31,8 +31,8 @@ jQuery.fn.table2CSV = function(options) {
     // actual data
     $(el).find('tr').each(function() {
         var tmpRow = [];
-        $(this).filter(':visible').find(options.columnSelector).each(function() {
-            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        $(this).find(options.columnSelector).each(function() {
+            tmpRow[tmpRow.length] = formatData($(this).html());
         });
         row2CSV(tmpRow);
     });
