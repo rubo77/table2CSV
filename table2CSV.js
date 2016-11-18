@@ -50,7 +50,7 @@ jQuery.fn.table2CSV = function(options) {
         if(options.transform_gt_lt){
             mydata=sinri_recover_gt_and_lt(mydata);
         }
-        var url='data:text/csv;charset=utf8,' + encodeURIComponent(mydata);
+        var url='data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(mydata);
         window.open(url);
         return true;
     } 
