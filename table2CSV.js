@@ -82,6 +82,9 @@ jQuery.fn.table2CSV = function(options) {
         // replace " with “
         var regexp = new RegExp(/["]/g);
         var output = input.replace(regexp, "“");
+        // replace ' with ’
+        var regexp = new RegExp(/[']/g);
+        var output = input.replace(regexp, "’");
         //HTML
         var regexp = new RegExp(/\<[^\<]+\>/g);
         var output = output.replace(regexp, "");
