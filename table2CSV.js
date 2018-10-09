@@ -6,7 +6,8 @@ jQuery.fn.table2CSV = function(options) {
         columnSelector: 'td',
         delivery: 'popup', // popup, value, download
         // filename: 'powered_by_sinri.csv', // filename to download
-        transform_gt_lt: true // make &gt; and &lt; to > and <
+        transform_gt_lt: true, // make &gt; and &lt; to > and <
+        replace: [], // [a,q]
     },
     options);
 
@@ -82,6 +83,11 @@ jQuery.fn.table2CSV = function(options) {
         // replace " with “
         var regexp = new RegExp(/["]/g);
         var output = input.replace(regexp, "“");
+        //if isset replace
+        if(options.replace.length == 2){
+            regexp = new RegExp(options.replace[0]);
+            output = input.replace(regexp, options.replace[1]);
+        }
         //HTML
         var regexp = new RegExp(/\<[^\<]+\>/g);
         var output = output.replace(regexp, "");
