@@ -1,4 +1,4 @@
-﻿jQuery.fn.table2CSV = function(options) {
+jQuery.fn.table2CSV = function(options) {
     var options = jQuery.extend({
         separator: ',',
         header: [],
@@ -6,12 +6,9 @@
         columnSelector: 'td',
         delivery: 'popup', // popup, value, download
         // filename: 'powered_by_sinri.csv', // filename to download
-        transform_gt_lt: true, // make &gt; and &lt; to > and <
-        excludeHidden: true,
-        valueDelimitor: '"',
-        valueDelimitorReplacement: '“',
-        headersRows: 0
-    }, options);
+        transform_gt_lt: true // make &gt; and &lt; to > and <
+    },
+    options);
 
     var csvData = [];
     var headerArr = [];
@@ -26,34 +23,18 @@
             tmpRow[tmpRow.length] = formatData(options.header[i]);
         }
     } else {
-        var $filteredEl;
-        if (options.excludeHidden)
-            $filteredEl = $(el).filter(':visible');
-        else
-            $filteredEl = $(el);
-        $filteredEl.find(options.headerSelector).each(function() {
-            if (!options.excludeHidden || $(this).css('display') != 'none')
-                tmpRow[tmpRow.length] = formatData($(this).html());
+        $(el).filter(':visible').find(options.headerSelector).each(function() {
+            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
         });
     }
 
     row2CSV(tmpRow);
 
     // actual data
-    var $rows = $(el).find('tr');
-    if (options.headersRows > 0)
-        $rows = $rows.filter(":gt(" + options.headersRows + ")");
-
-    $rows.each(function() {
+    $(el).find('tr').each(function() {
         var tmpRow = [];
-        var $filteredRow;
-        if (options.excludeHidden)
-            $filteredRow = $(this).filter(':visible');
-        else
-            $filteredRow = $(this);
-        $filteredRow.find(options.columnSelector).each(function() {
-            if (!options.excludeHidden || $(this).css('display') != 'none')
-                tmpRow[tmpRow.length] = formatData($(this).html());
+        $(this).filter(':visible').find(options.columnSelector).each(function() {
+            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
         });
         row2CSV(tmpRow);
     });
@@ -98,28 +79,15 @@
         }
     }
     function formatData(input) {
+        // replace " with “
+        var regexp = new RegExp(/["]/g);
+        var output = input.replace(regexp, "“");
         //HTML
         var regexp = new RegExp(/\<[^\<]+\>/g);
-        var output = input.replace(regexp, "");
+        var output = output.replace(regexp, "");
         output = output.replace(/&nbsp;/gi,' '); //replace &nbsp;
-
-        output = output.trim();
-
-        if (!options.valueDelimitor || options.valueDelimitor.length == 0)
-            return output;
-
-        // replace " with “
-        if (options.valueDelimitorReplacement && options.valueDelimitorReplacement.length > 0) {
-            regexp = new RegExp("/[" + options.valueDelimitor + "]/g");
-            output = output.replace(regexp, options.valueDelimitorReplacement);
-        }
-
-        output = output.trim();
-
-        if (output == "")
-            return '';
-
-        return options.valueDelimitor + output.trim() + options.valueDelimitor;
+        if (output == "") return '';
+        return '"' + output.trim() + '"';
     }
     function popup(data) {
         var generator = window.open('', 'csv', 'height=400,width=600');
