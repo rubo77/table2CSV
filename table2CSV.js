@@ -6,7 +6,11 @@ jQuery.fn.table2CSV = function(options) {
         columnSelector: 'td',
         delivery: 'popup', // popup, value, download
         // filename: 'powered_by_sinri.csv', // filename to download
-        transform_gt_lt: true // make &gt; and &lt; to > and <
+        transform_gt_lt: true, // make &gt; and &lt; to > and <
+        excludeHidden: true,
+        valueDelimitor: '"',
+        valueDelimitorReplacement: '“',
+        headersRows: 0
     },
     options);
 
@@ -23,18 +27,34 @@ jQuery.fn.table2CSV = function(options) {
             tmpRow[tmpRow.length] = formatData(options.header[i]);
         }
     } else {
-        $(el).filter(':visible').find(options.headerSelector).each(function() {
-            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        var $filteredEl;
+        if (options.excludeHidden)
+            $filteredEl = $(el).filter(':visible');
+        else
+            $filteredEl = $(el);
+        $filteredEl.filter(':visible').find(options.headerSelector).each(function() {
+            if (!options.excludeHidden || $(this).css('display') != 'none')
+                tmpRow[tmpRow.length] = formatData($(this).html());
         });
     }
 
     row2CSV(tmpRow);
 
     // actual data
-    $(el).find('tr').each(function() {
+    var $rows = $(el).find('tr');
+    if (options.headersRows > 0)
+        $rows = $rows.filter(":gt(" + options.headersRows + ")");
+
+    $rows.each(function() {
         var tmpRow = [];
-        $(this).filter(':visible').find(options.columnSelector).each(function() {
-            if ($(this).css('display') != 'none') tmpRow[tmpRow.length] = formatData($(this).html());
+        var $filteredRow;
+        if (options.excludeHidden)
+            $filteredRow = $(this).filter(':visible');
+        else
+            $filteredRow = $(this);
+        $filteredRow.filter(':visible').find(options.columnSelector).each(function() {
+            if (!options.excludeHidden || $(this).css('display') != 'none')
+                tmpRow[tmpRow.length] = formatData($(this).html());
         });
         row2CSV(tmpRow);
     });
@@ -79,15 +99,28 @@ jQuery.fn.table2CSV = function(options) {
         }
     }
     function formatData(input) {
-        // replace " with “
-        var regexp = new RegExp(/["]/g);
-        var output = input.replace(regexp, "“");
         //HTML
         var regexp = new RegExp(/\<[^\<]+\>/g);
-        var output = output.replace(regexp, "");
+        var output = input.replace(regexp, "");
         output = output.replace(/&nbsp;/gi,' '); //replace &nbsp;
-        if (output == "") return '';
-        return '"' + output.trim() + '"';
+        
+        output = output.trim();
+
+        if (!options.valueDelimitor || options.valueDelimitor.length == 0)
+            return output;
+        
+        // replace " with “
+        if (options.valueDelimitorReplacement && options.valueDelimitorReplacement.length > 0) {
+            regexp = new RegExp("/[" + options.valueDelimitor + "]/g");
+            output = output.replace(regexp, options.valueDelimitorReplacement);
+        }
+
+        output = output.trim();
+
+        if (output == "")
+            return '';
+
+        return options.valueDelimitor + output.trim() + options.valueDelimitor;
     }
     function popup(data) {
         var generator = window.open('', 'csv', 'height=400,width=600');
