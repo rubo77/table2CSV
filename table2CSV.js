@@ -79,9 +79,9 @@ jQuery.fn.table2CSV = function(options) {
         }
     }
     function formatData(input) {
-        // replace " with “
+        // double " according to rfc4180
         var regexp = new RegExp(/["]/g);
-        var output = input.replace(regexp, "“");
+        var output = input.replace(regexp, '""');
         //HTML
         var regexp = new RegExp(/\<[^\<]+\>/g);
         var output = output.replace(regexp, "");
